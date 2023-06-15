@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Grid, Button, IconButton } from '@mui/material';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import Item from './Components/Item';
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  const handleAddItem = () => {
+    setItems(prevItems => [...prevItems, <Item key={prevItems.length} />]);
+  };
+
+  const handleDeleteItem = index => {
+    setItems(prevItems => prevItems.filter((item, i) => i !== index));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ width: '100%' }}>
+      <Grid
+        container
+        spacing={2}
+        my={5}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {items.map((item, index) => (
+          <Grid item key={index}>
+            {item}
+            <IconButton variant="contained" onClick={() => handleDeleteItem(index)}>
+                <RemoveCircleOutlineIcon />
+            </IconButton>
+          </Grid>
+        ))}
+        <Grid item>
+          <Button variant="text" color="primary" onClick={handleAddItem}>
+            Adicionar Item
+          </Button>
+          <Button variant="text" color="primary">
+            Gerar Texto
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 }
