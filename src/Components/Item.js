@@ -66,6 +66,8 @@ export default function Item( {tipoItem} ) {
 
       }}>
 
+        <Typography>Item de {tipoItem}</Typography>
+
       <TextField
       style={{ width: 720 }}
       id="standard-basic" 
