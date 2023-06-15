@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { Grid, Button, IconButton } from '@mui/material';
+import { Grid, Button, IconButton,Select, MenuItem, FormControl, TextField } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Item from './Components/Item';
 
 function App() {
+
+  const [selectedType, setSelectedType] = useState('');
+
+  const handleSelectType = (event) => {
+    setSelectedType(event.target.value);
+  };
+
   const [items, setItems] = useState([]);
 
   const handleAddItem = () => {
-    setItems(prevItems => [...prevItems, <Item key={prevItems.length} />]);
+    setItems(prevItems => [...prevItems, <Item tipoItem={selectedType} key={prevItems.length} />]);
   };
 
   const handleDeleteItem = index => {
@@ -32,14 +39,37 @@ function App() {
             </IconButton>
           </Grid>
         ))}
+
         <Grid item>
-          <Button variant="text" color="primary" onClick={handleAddItem}>
-            Adicionar Item
-          </Button>
-          <Button variant="text" color="primary">
-            Gerar Texto
-          </Button>
+          <FormControl>
+            <Select
+              style={{ width: 300 }}
+              labelId="component-type-label"
+              id="component-type"
+              value={selectedType}
+              onChange={handleSelectType}
+              renderInput={(params) => (
+                <TextField {...params} label="Atividade" variant="outlined" />
+              )}
+            >
+              <MenuItem value="Frontend">Frontend</MenuItem>
+              <MenuItem value="Backend">Backend</MenuItem>
+              <MenuItem value="Banco de dados">Banco de dados</MenuItem>
+              <MenuItem value="Deploy">Deploy</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
+        {selectedType && (
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={() => handleAddItem(selectedType)}>
+              Adicionar Item {selectedType}
+            </Button>
+          </Grid>
+        )}
+
+
+
+
       </Grid>
     </div>
   );
