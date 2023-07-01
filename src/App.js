@@ -56,6 +56,8 @@ function App() {
     setTotalPoints((prevTotalPoints) => prevTotalPoints + points);
   };
 
+  console.log('e');
+
   return (
     <div style={{ width: '100%' }}>
       <Grid

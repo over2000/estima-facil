@@ -4,8 +4,7 @@ import { Grid, TextField, Autocomplete, Chip, Typography } from '@mui/material';
 
 export default function Item({ tipoItem, onTotalPointsChange }) {
 
-  console.log(tipoItem)
-
+  console.log('e', tipoItem)
   const frontendOptions = [
     { key: 0, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
     { key: 1, value: "P.2 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end, baseada em programação semelhante já existente ou CRUD. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
