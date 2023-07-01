@@ -1,78 +1,61 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  Button,
-  IconButton,
-  Select,
-  MenuItem,
-  FormControl,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Grid, Button, IconButton, Select, MenuItem, FormControl, TextField, Typography } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Item from './Components/Item';
 
 function App() {
   const [selectedType, setSelectedType] = useState('');
-
-  const handleSelectType = (event) => {
+  const handleSelectType = event => {
     setSelectedType(event.target.value);
   };
 
   const [items, setItems] = useState([]);
 
   const handleAddItem = () => {
-    setItems((prevItems) => [
+    setItems(prevItems => [
       ...prevItems,
-      <Item
-        tipoItem={selectedType}
-        key={prevItems.length}
-        onTotalPointsChange={(points) =>
-          handleTotalPointsChange(selectedType, points)
-        }
-      />,
+      { tipoItem: selectedType, selectedItems: [], totalPoints: 0 }
     ]);
   };
 
-  const handleDeleteItem = (index) => {
-    setItems((prevItems) => prevItems.filter((item, i) => i !== index));
+  const handleDeleteItem = index => {
+    setItems(prevItems => prevItems.filter((_, i) => i !== index));
   };
 
-  const [totalPoints, setTotalPoints] = useState(0);
-
-  const [pointsByType, setPointsByType] = useState({
-    Frontend: 0,
-    Backend: 0,
-    'Banco de dados': 0,
-    Deploy: 0,
-  });
-
-  const handleTotalPointsChange = (type, points) => {
-    setPointsByType((prevPoints) => ({
-      ...prevPoints,
-      [type]: (prevPoints[type] || 0) + points,
-    }));
-
-    setTotalPoints((prevTotalPoints) => prevTotalPoints + points);
+  const handleItemsChange = (index, newItems) => {
+    setItems(prevItems =>
+      prevItems.map((item, i) => (i === index ? { ...item, selectedItems: newItems } : item))
+    );
   };
+
+  const handleTotalPointsChange = (index, points) => {
+    setItems(prevItems =>
+      prevItems.map((item, i) => (i === index ? { ...item, totalPoints: points } : item))
+    );
+  };
+
+  const calculateTotalPoints = () => {
+    let sum = 0;
+    items.forEach(item => {
+      sum += item.totalPoints;
+    });
+    return sum;
+  };
+
+  const totalPoints = calculateTotalPoints();
 
   return (
     <div style={{ width: '100%' }}>
-      <Grid
-        container
-        spacing={2}
-        my={5}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Grid container spacing={2} my={5} direction="column" alignItems="center" justifyContent="center">
         {items.map((item, index) => (
           <Grid item key={index}>
-            {item}
-            <IconButton
-              variant="contained"
-              onClick={() => handleDeleteItem(index)}
-            >
+            <Item
+              tipoItem={item.tipoItem}
+              selectedItems={item.selectedItems}
+              onItemsChange={newItems => handleItemsChange(index, newItems)}
+              onTotalPointsChange={points => handleTotalPointsChange(index, points)}
+            />
+            <IconButton variant="contained" onClick={() => handleDeleteItem(index)}>
               <RemoveCircleOutlineIcon />
             </IconButton>
           </Grid>
@@ -86,9 +69,7 @@ function App() {
               id="component-type"
               value={selectedType}
               onChange={handleSelectType}
-              renderInput={(params) => (
-                <TextField {...params} label="Atividade" variant="outlined" />
-              )}
+              renderInput={params => <TextField {...params} label="Atividade" variant="outlined" />}
             >
               <MenuItem value="Frontend">Frontend</MenuItem>
               <MenuItem value="Backend">Backend</MenuItem>
@@ -99,24 +80,14 @@ function App() {
         </Grid>
         {selectedType && (
           <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleAddItem(selectedType)}
-            >
+            <Button variant="contained" color="primary" onClick={handleAddItem}>
               Adicionar Item {selectedType}
             </Button>
           </Grid>
         )}
 
-        {Object.entries(pointsByType).map(([type, points]) => (
-          <Grid item key={type}>
-            <Typography>{`${type}: ${points} pontos`}</Typography>
-          </Grid>
-        ))}
-
         <Grid item>
-          <Typography>Somatório geral: {totalPoints} pontos</Typography>
+          <Typography>Total de pontos: {totalPoints}</Typography>
         </Grid>
       </Grid>
     </div>
