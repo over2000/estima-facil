@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { Grid, TextField, Autocomplete, Chip, Typography } from '@mui/material';
 
-export default function Item({ tipoItem }) {
+export default function Item({ tipoItem, onTotalPointsChange }) {
 
   console.log(tipoItem)
-
 
   const frontendOptions = [
     { key: 0, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
@@ -37,7 +36,7 @@ export default function Item({ tipoItem }) {
 
   const deployOptions = [
     { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-    { key: 0, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+    { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
   ];
 
   const [options, setOptions] = useState([]);
@@ -71,6 +70,11 @@ export default function Item({ tipoItem }) {
   };
 
   const totalPoints = calculateTotalPoints();
+
+
+  useEffect(() => {
+    onTotalPointsChange(totalPoints);
+  }, [onTotalPointsChange, totalPoints]);
 
   return (
 
