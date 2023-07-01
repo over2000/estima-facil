@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, TextField, Autocomplete, Typography } from '@mui/material';
 
 export default function Item({ tipoItem, selectedItems, onItemsChange, onTotalPointsChange }) {
@@ -32,7 +32,7 @@ export default function Item({ tipoItem, selectedItems, onItemsChange, onTotalPo
 
   const deployOptions = [
     { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-    { key: 0, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+    { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
   ];
 
   const getOptionsByType = (type) => {
