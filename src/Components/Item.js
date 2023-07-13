@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import { Grid, TextField, Autocomplete, Chip, Typography } from '@mui/material';
 
-export default function Item({ tipoItem, onTotalPointsChange }) {
+export default function Item({ tipoItem }) {
 
-  console.log('e', tipoItem)
+  console.log(tipoItem)
+
+
   const frontendOptions = [
     { key: 0, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
     { key: 1, value: "P.2 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end, baseada em programação semelhante já existente ou CRUD. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
@@ -19,7 +21,7 @@ export default function Item({ tipoItem, onTotalPointsChange }) {
   const backendendOptions = [
     { key: 0, value: "P.6 - Programação de teste unitário. A programação de teste unitário será remunerada com o mesmo número de USTs da função/método/serviço que esse teste visa a testar.", points: 5 },
     { key: 1, value: "P.7 - Alteração de programação de operação de banco. Esta atividade envolve todo o escopo da alteração (banco e programação).", points: 5 },
-    { key: 2, value: "P.8 - Alteração pontual de funcionalidade existente, no back-end para arquitetura orientada a serviço ou para aplicações monólitos.", points: 5 },
+    { key: 2, value: "P.8 - Alteração pontual de funcionalidade existente, no back-end para arquitetura orientada a  serviço ou para aplicações monólitos.", points: 5 },
     { key: 3, value: "P.9 - Programação de método para gravação de logs, com teste e debug incluídos.", points: 5 },
     { key: 4, value: "T.1 - Teste e Debug funcionalidades novas.", points: 5 },
     { key: 5, value: "T.2 - Teste e Debug para manutenção.", points: 5 },
@@ -35,53 +37,78 @@ export default function Item({ tipoItem, onTotalPointsChange }) {
 
   const deployOptions = [
     { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-    { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+    { key: 0, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
   ];
 
-  const getOptionsByType = (type) => {
-    switch (type) {
-      case 'Frontend':
-        return frontendOptions;
-      case 'Backend':
-        return backendendOptions;
-      case 'Banco de dados':
-        return bancoOptions;
-      case 'Deploy':
-        return deployOptions;
-      default:
-        return [];
-    }
-  };
+  const [options, setOptions] = useState([]);
 
-  const calculateTotalPoints = (items) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+
+
+  useEffect(() => {
+    if (tipoItem === 'Frontend') {
+      setOptions(frontendOptions);
+    }
+    if (tipoItem === 'Backend') {
+      setOptions(backendendOptions);
+    }
+    if (tipoItem === 'Banco de dados') {
+      setOptions(bancoOptions);
+    }
+    if (tipoItem === 'Deploy') {
+      setOptions(deployOptions);
+    }
+
+  }, []);
+
+  const calculateTotalPoints = () => {
     let sum = 0;
-    items.forEach(item => {
+    selectedItems.forEach(item => {
       sum += item.points || 0;
     });
     return sum;
   };
 
-  useEffect(() => {
-    onTotalPointsChange(calculateTotalPoints(selectedItems));
-  }, [selectedItems, onTotalPointsChange]);
+  const totalPoints = calculateTotalPoints();
 
   return (
-    <Grid item my={2} sx={{}}>
+
+    <Grid item
+      my={2}
+      sx={{
+
+      }}>
+
       <Typography>Item de {tipoItem}</Typography>
-      <TextField style={{ width: 720 }} id="standard-basic" label="Descrição" variant="standard" />
+
+
+
+      <TextField
+        style={{ width: 720 }}
+        id="standard-basic"
+        label="Descrição"
+        variant="standard" />
+
       <Grid item xs={12} mt={3}>
         <Autocomplete
           multiple
           id="tags-standard"
-          options={getOptionsByType(tipoItem)}
-          getOptionLabel={option => option.value}
-          getOptionValue={option => option.points}
+          options={options}
+          getOptionLabel={(option) => option.value}
+          getOptionValue={(option) => option.points}
           style={{ width: 720 }}
-          renderInput={params => <TextField {...params} label="Atividade" variant="outlined" />}
-          onChange={(event, value) => onItemsChange(value)}
+          renderInput={(params) => (
+            <TextField {...params} label="Atividade" variant="outlined" />
+
+          )}
+          onChange={(event, value) => setSelectedItems(value)}
         />
       </Grid>
-      <Typography>Total de pontos: {calculateTotalPoints(selectedItems)}</Typography>
+
+      <Typography>Total de pontos: {totalPoints}</Typography>
+
     </Grid>
+
   );
 }
