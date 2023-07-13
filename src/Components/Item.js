@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Grid, TextField, Autocomplete, Typography } from '@mui/material';
 
-import { Grid, TextField, Autocomplete, Chip, Typography } from '@mui/material';
-
-export default function Item({ tipoItem }) {
-
-  console.log(tipoItem)
-
-
+export default function Item({ id, tipoItem, onTotalPointsChange }) {
   const frontendOptions = [
     { key: 0, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
     { key: 1, value: "P.2 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end, baseada em programação semelhante já existente ou CRUD. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
@@ -18,7 +13,7 @@ export default function Item({ tipoItem }) {
     { key: 7, value: "T.3 - Teste e Debug para manutenção, de sistemas críticos, com dependências de outros sistemas.", points: 5 },
   ];
 
-  const backendendOptions = [
+  const backendOptions = [
     { key: 0, value: "P.6 - Programação de teste unitário. A programação de teste unitário será remunerada com o mesmo número de USTs da função/método/serviço que esse teste visa a testar.", points: 5 },
     { key: 1, value: "P.7 - Alteração de programação de operação de banco. Esta atividade envolve todo o escopo da alteração (banco e programação).", points: 5 },
     { key: 2, value: "P.8 - Alteração pontual de funcionalidade existente, no back-end para arquitetura orientada a  serviço ou para aplicações monólitos.", points: 5 },
@@ -37,59 +32,44 @@ export default function Item({ tipoItem }) {
 
   const deployOptions = [
     { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-    { key: 0, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+    { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
   ];
 
-  const [options, setOptions] = useState([]);
-
   const [selectedItems, setSelectedItems] = useState([]);
-
-
+  const [options, setOptions] = useState([]); // Adicione a declaração de options
+  const [totalPoints, setTotalPoints] = useState(0); 
 
   useEffect(() => {
     if (tipoItem === 'Frontend') {
       setOptions(frontendOptions);
-    }
-    if (tipoItem === 'Backend') {
-      setOptions(backendendOptions);
-    }
-    if (tipoItem === 'Banco de dados') {
+    } else if (tipoItem === 'Backend') {
+      setOptions(backendOptions);
+    } else if (tipoItem === 'Banco de dados') {
       setOptions(bancoOptions);
-    }
-    if (tipoItem === 'Deploy') {
+    } else if (tipoItem === 'Deploy') {
       setOptions(deployOptions);
     }
+  }, [tipoItem]);
 
-  }, []);
+  const handleSelectedItemsChange = (event, value) => {
+    setSelectedItems(value);
+    const newTotalPoints = calculateTotalPoints(value);
+    setTotalPoints(newTotalPoints);
+    onTotalPointsChange(id, newTotalPoints);
+  };
 
-  const calculateTotalPoints = () => {
+  const calculateTotalPoints = (selectedItems) => {
     let sum = 0;
-    selectedItems.forEach(item => {
+    selectedItems.forEach((item) => {
       sum += item.points || 0;
     });
     return sum;
   };
 
-  const totalPoints = calculateTotalPoints();
-
   return (
-
-    <Grid item
-      my={2}
-      sx={{
-
-      }}>
-
+    <Grid item my={2}>
       <Typography>Item de {tipoItem}</Typography>
-
-
-
-      <TextField
-        style={{ width: 720 }}
-        id="standard-basic"
-        label="Descrição"
-        variant="standard" />
-
+      <TextField style={{ width: 720 }} id="standard-basic" label="Descrição" variant="standard" />
       <Grid item xs={12} mt={3}>
         <Autocomplete
           multiple
@@ -98,17 +78,11 @@ export default function Item({ tipoItem }) {
           getOptionLabel={(option) => option.value}
           getOptionValue={(option) => option.points}
           style={{ width: 720 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Atividade" variant="outlined" />
-
-          )}
-          onChange={(event, value) => setSelectedItems(value)}
+          renderInput={(params) => <TextField {...params} label="Atividade" variant="outlined" />}
+          onChange={handleSelectedItemsChange}
         />
       </Grid>
-
       <Typography>Total de pontos: {totalPoints}</Typography>
-
     </Grid>
-
   );
 }
