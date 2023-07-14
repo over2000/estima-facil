@@ -4,6 +4,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Item from './Components/Item';
 
 function App() {
+  
   const [selectedType, setSelectedType] = useState('');
   const [items, setItems] = useState([]);
   const [itemId, setItemId] = useState(0); // Variável para controlar o ID do item
@@ -58,11 +59,37 @@ function App() {
 
   }, [items]);
 
-  console.log('FTTL',frontendTotalPoints)
-
   return (
     <div style={{ width: '100%' }}>
+
+    
+
       <Grid container spacing={2} my={5} direction="column" alignItems="center" justifyContent="center">
+
+      {frontendTotalPoints > 0 &&
+        <Grid item>
+        <Typography variant="h6" color="primary">
+          USTs FRONTEND: {frontendTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
+        {backendTotalPoints > 0 &&
+        <Grid item>
+        <Typography variant="h6" color="primary">
+          USTs BACKEND: {backendTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
+        {bancoTotalPoints > 0 &&
+        <Grid item>
+        <Typography variant="h6" color="primary">
+          USTs BANCO DE DADOS: {bancoTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
         {items.map((item) => (
           <Grid item key={item.id}>
             <Item id={item.id} tipoItem={item.tipoItem} totalPoints={item.totalPoints} onTotalPointsChange={handleTotalPointsChange} />
@@ -74,6 +101,7 @@ function App() {
         <Grid item>
           <FormControl>
             <Select
+              size="small"
               style={{ width: 300 }}
               labelId="component-type-label"
               id="component-type"
@@ -90,35 +118,13 @@ function App() {
         </Grid>
         {selectedType && (
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleAddItem}>
+            <Button size="small" variant="outlined" color="primary" onClick={handleAddItem}>
               Adicionar Item {selectedType}
             </Button>
           </Grid>
         )}
 
-        {frontendTotalPoints > 0 &&
-        <Grid item>
-        <Typography>
-          USTs FRONTEND: {frontendTotalPoints}
-        </Typography>
-        </Grid>
-        }
 
-        {backendTotalPoints > 0 &&
-        <Grid item>
-        <Typography>
-          USTs BACKEND: {backendTotalPoints}
-        </Typography>
-        </Grid>
-        }
-
-        {bancoTotalPoints > 0 &&
-        <Grid item>
-        <Typography>
-          USTs BANCO DE DADOS: {bancoTotalPoints}
-        </Typography>
-        </Grid>
-        }
 
       </Grid>
     </div>

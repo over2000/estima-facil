@@ -68,21 +68,20 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
 
   return (
     <Grid item my={2}>
-      <Typography>Item de {tipoItem}</Typography>
-      <TextField style={{ width: 720 }} id="standard-basic" label="Descrição" variant="standard" />
+      <TextField style={{ width: 720 }} id="standard-basic" label="Descrição" size="small" variant="outlined" />
       <Grid item xs={12} mt={3}>
         <Autocomplete
+          size="small"
           multiple
           id="tags-standard"
           options={options}
           getOptionLabel={(option) => option.value}
           getOptionValue={(option) => option.points}
           style={{ width: 720 }}
-          renderInput={(params) => <TextField {...params} label="Atividade" variant="outlined" />}
+          renderInput={(params) => <TextField {...params} label="Atividade" size="small" variant="outlined" />}
           onChange={handleSelectedItemsChange}
         />
       </Grid>
-      <Typography>Total de pontos: {totalPoints}</Typography>
     </Grid>
   );
 }
