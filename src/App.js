@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, Button, IconButton, Select, MenuItem, FormControl, TextField } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Grid, Button, IconButton, Select, MenuItem, FormControl, TextField, Typography } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Item from './Components/Item';
 
@@ -8,8 +8,14 @@ function App() {
   const [items, setItems] = useState([]);
   const [itemId, setItemId] = useState(0); // Variável para controlar o ID do item
 
-
-  console.log('items',items)
+  const getTotalPointsByTipoItem = (tipoItem) => {
+    return items.reduce((total, item) => {
+      if (item.tipoItem === tipoItem) {
+        return total + item.totalPoints;
+      }
+      return total;
+    }, 0);
+  };
 
   const handleSelectType = (event) => {
     setSelectedType(event.target.value);
@@ -40,22 +46,31 @@ function App() {
     );
   };
 
+  const frontendTotalPoints = getTotalPointsByTipoItem('Frontend');
+  const backendTotalPoints = getTotalPointsByTipoItem('Backend');
+  const bancoTotalPoints = getTotalPointsByTipoItem('Banco');
+
+  useEffect((frontendTotalPoints, backendTotalPoints, bancoTotalPoints) => {
+
+    frontendTotalPoints = getTotalPointsByTipoItem('Frontend');
+    backendTotalPoints = getTotalPointsByTipoItem('Backend');
+    bancoTotalPoints = getTotalPointsByTipoItem('Banco');
+
+  }, [items]);
+
+  console.log('FTTL',frontendTotalPoints)
+
   return (
     <div style={{ width: '100%' }}>
       <Grid container spacing={2} my={5} direction="column" alignItems="center" justifyContent="center">
-      {items.map((item) => (
-  <Grid item key={item.id}>
-    <Item
-      id={item.id}
-      tipoItem={item.tipoItem}
-      totalPoints={item.totalPoints}
-      onTotalPointsChange={handleTotalPointsChange}
-    />
-    <IconButton variant="contained" onClick={() => handleDeleteItem(item.id)}>
-      <RemoveCircleOutlineIcon />
-    </IconButton>
-  </Grid>
-))}
+        {items.map((item) => (
+          <Grid item key={item.id}>
+            <Item id={item.id} tipoItem={item.tipoItem} totalPoints={item.totalPoints} onTotalPointsChange={handleTotalPointsChange} />
+            <IconButton variant="contained" onClick={() => handleDeleteItem(item.id)}>
+              <RemoveCircleOutlineIcon />
+            </IconButton>
+          </Grid>
+        ))}
         <Grid item>
           <FormControl>
             <Select
@@ -68,7 +83,7 @@ function App() {
             >
               <MenuItem value="Frontend">Frontend</MenuItem>
               <MenuItem value="Backend">Backend</MenuItem>
-              <MenuItem value="Banco de dados">Banco de dados</MenuItem>
+              <MenuItem value="Banco">Banco</MenuItem>
               <MenuItem value="Deploy">Deploy</MenuItem>
             </Select>
           </FormControl>
@@ -80,6 +95,31 @@ function App() {
             </Button>
           </Grid>
         )}
+
+        {frontendTotalPoints > 0 &&
+        <Grid item>
+        <Typography>
+          USTs FRONTEND: {frontendTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
+        {backendTotalPoints > 0 &&
+        <Grid item>
+        <Typography>
+          USTs BACKEND: {backendTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
+        {bancoTotalPoints > 0 &&
+        <Grid item>
+        <Typography>
+          USTs BANCO DE DADOS: {bancoTotalPoints}
+        </Typography>
+        </Grid>
+        }
+
       </Grid>
     </div>
   );
