@@ -30,10 +30,10 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
     { key: 3, value: "DB.4 - Criação de script de DDL (CREATE, ALTER E DROP)", points: 5 },
   ];
 
-  const deployOptions = [
-    { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-    { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-  ];
+  //const deployOptions = [
+  //  { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+  //  { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
+  //];
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [options, setOptions] = useState([]); // Adicione a declaração de options
@@ -44,10 +44,10 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
       setOptions(frontendOptions);
     } else if (tipoItem === 'Backend') {
       setOptions(backendOptions);
-    } else if (tipoItem === 'Banco de dados') {
+    } else if (tipoItem === 'Banco') {
       setOptions(bancoOptions);
-    } else if (tipoItem === 'Deploy') {
-      setOptions(deployOptions);
+  //  } else if (tipoItem === 'Deploy') {
+  //    setOptions(deployOptions);
     }
   }, [tipoItem]);
 
