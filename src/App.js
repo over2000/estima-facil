@@ -4,7 +4,6 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Item from './Components/Item';
 
 function App() {
-  
   const [selectedType, setSelectedType] = useState('');
   const [items, setItems] = useState([]);
   const [itemId, setItemId] = useState(0); // Variável para controlar o ID do item
@@ -47,85 +46,95 @@ function App() {
     );
   };
 
-  const frontendTotalPoints = getTotalPointsByTipoItem('Frontend');
-  const backendTotalPoints = getTotalPointsByTipoItem('Backend');
-  const bancoTotalPoints = getTotalPointsByTipoItem('Banco');
+  let frontendTotalPoints = getTotalPointsByTipoItem('Frontend');
+  let backendTotalPoints = getTotalPointsByTipoItem('Backend');
+  let bancoTotalPoints = getTotalPointsByTipoItem('Banco');
 
-  useEffect((frontendTotalPoints, backendTotalPoints, bancoTotalPoints) => {
-
+  useEffect(() => {
     frontendTotalPoints = getTotalPointsByTipoItem('Frontend');
     backendTotalPoints = getTotalPointsByTipoItem('Backend');
     bancoTotalPoints = getTotalPointsByTipoItem('Banco');
-
   }, [items]);
 
   return (
     <div style={{ width: '100%' }}>
+      <Grid container spacing={2} my={5} alignItems="flex-start" justifyContent="center">
+        {/* Metade esquerda */}
+        <Grid item xs={12} sm={6}>
+          <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center" mt={2}>
+            {frontendTotalPoints > 0 && (
+              <Grid item>
+                <Typography variant="h6" color="primary">
+                  USTs FRONTEND: {frontendTotalPoints}
+                </Typography>
+              </Grid>
+            )}
 
-    
+            {backendTotalPoints > 0 && (
+              <Grid item>
+                <Typography variant="h6" color="primary">
+                  USTs BACKEND: {backendTotalPoints}
+                </Typography>
+              </Grid>
+            )}
 
-      <Grid container spacing={2} my={5} direction="column" alignItems="center" justifyContent="center">
+            {bancoTotalPoints > 0 && (
+              <Grid item>
+                <Typography variant="h6" color="primary">
+                  USTs BANCO DE DADOS: {bancoTotalPoints}
+                </Typography>
+              </Grid>
+            )}
 
-      {frontendTotalPoints > 0 &&
-        <Grid item>
-        <Typography variant="h6" color="primary">
-          USTs FRONTEND: {frontendTotalPoints}
-        </Typography>
-        </Grid>
-        }
+            {items.map((item) => (
+              <Grid item key={item.id}>
+                <Item id={item.id} tipoItem={item.tipoItem} totalPoints={item.totalPoints} onTotalPointsChange={handleTotalPointsChange} />
+                <IconButton variant="contained" onClick={() => handleDeleteItem(item.id)}>
+                  <RemoveCircleOutlineIcon />
+                </IconButton>
+              </Grid>
+            ))}
 
-        {backendTotalPoints > 0 &&
-        <Grid item>
-        <Typography variant="h6" color="primary">
-          USTs BACKEND: {backendTotalPoints}
-        </Typography>
-        </Grid>
-        }
+            <Grid item>
+              <FormControl>
+                <Select
+                  size="small"
+                  style={{ width: 300 }}
+                  labelId="component-type-label"
+                  id="component-type"
+                  value={selectedType}
+                  onChange={handleSelectType}
+                  renderInput={(params) => <TextField {...params} label="Atividade" variant="outlined" />}
+                >
+                  <MenuItem value="Frontend">Frontend</MenuItem>
+                  <MenuItem value="Backend">Backend</MenuItem>
+                  <MenuItem value="Banco">Banco</MenuItem>
+                  <MenuItem value="Deploy">Deploy</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
 
-        {bancoTotalPoints > 0 &&
-        <Grid item>
-        <Typography variant="h6" color="primary">
-          USTs BANCO DE DADOS: {bancoTotalPoints}
-        </Typography>
-        </Grid>
-        }
-
-        {items.map((item) => (
-          <Grid item key={item.id}>
-            <Item id={item.id} tipoItem={item.tipoItem} totalPoints={item.totalPoints} onTotalPointsChange={handleTotalPointsChange} />
-            <IconButton variant="contained" onClick={() => handleDeleteItem(item.id)}>
-              <RemoveCircleOutlineIcon />
-            </IconButton>
+            {selectedType && (
+              <Grid item>
+                <Button size="small" variant="outlined" color="primary" onClick={handleAddItem}>
+                  Adicionar Item {selectedType}
+                </Button>
+              </Grid>
+            )}
           </Grid>
-        ))}
-        <Grid item>
-          <FormControl>
-            <Select
-              size="small"
-              style={{ width: 300 }}
-              labelId="component-type-label"
-              id="component-type"
-              value={selectedType}
-              onChange={handleSelectType}
-              renderInput={(params) => <TextField {...params} label="Atividade" variant="outlined" />}
-            >
-              <MenuItem value="Frontend">Frontend</MenuItem>
-              <MenuItem value="Backend">Backend</MenuItem>
-              <MenuItem value="Banco">Banco</MenuItem>
-              <MenuItem value="Deploy">Deploy</MenuItem>
-            </Select>
-          </FormControl>
         </Grid>
-        {selectedType && (
-          <Grid item>
-            <Button size="small" variant="outlined" color="primary" onClick={handleAddItem}>
-              Adicionar Item {selectedType}
-            </Button>
-          </Grid>
-        )}
 
-
-
+        {/* Metade direita */}
+        <Grid item xs={12} sm={6}>
+          <TextField
+            multiline
+            rows={10}
+            variant="outlined"
+            fullWidth
+            defaultValue={bancoTotalPoints}
+            // Outras props que você desejar adicionar ao TextField
+          />
+        </Grid>
       </Grid>
     </div>
   );
