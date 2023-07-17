@@ -21,14 +21,18 @@ function App() {
     setSelectedType(event.target.value);
   };
 
+  console.log('items array',items);
+
   const handleAddItem = () => {
     const newItem = {
       id: itemId,
       tipoItem: selectedType,
       totalPoints: 0,
+      description: '',
+      selectedValues: [],
     };
     setItems((prevItems) => [...prevItems, newItem]);
-    setItemId((prevItemId) => prevItemId + 1); // Incrementa o ID do item
+    setItemId((prevItemId) => prevItemId + 1);
   };
 
   const handleDeleteItem = (itemId) => {
@@ -88,7 +92,7 @@ function App() {
 
             {items.map((item) => (
               <Grid item key={item.id}>
-                <Item id={item.id} tipoItem={item.tipoItem} totalPoints={item.totalPoints} onTotalPointsChange={handleTotalPointsChange} />
+                <Item id={item.id} tipoItem={item.tipoItem} items={items} setItems={setItems} />
                 <IconButton variant="contained" onClick={() => handleDeleteItem(item.id)}>
                   <RemoveCircleOutlineIcon />
                 </IconButton>
@@ -109,7 +113,6 @@ function App() {
                   <MenuItem value="Frontend">Frontend</MenuItem>
                   <MenuItem value="Backend">Backend</MenuItem>
                   <MenuItem value="Banco">Banco</MenuItem>
-                  <MenuItem value="Deploy">Deploy</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
