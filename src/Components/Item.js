@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, TextField, Autocomplete, Typography } from '@mui/material';
 
-export default function Item({ id, tipoItem, onTotalPointsChange }) {
+export default function Item({ id, tipoItem, items, setItems }) {
   const frontendOptions = [
     { key: 0, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
     { key: 1, value: "P.2 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end, baseada em programação semelhante já existente ou CRUD. Programação completa, incluindo validação do campo, sanitização das “strings” etc.", points: 5 },
@@ -30,14 +30,10 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
     { key: 3, value: "DB.4 - Criação de script de DDL (CREATE, ALTER E DROP)", points: 5 },
   ];
 
-  //const deployOptions = [
-  //  { key: 0, value: "IM.2 - Implantação do sistema em homologação (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-  //  { key: 1, value: "IM.2 - Implantação do sistema em produção (trabalho completo, incluindo geração de builds, scripts etc.)", points: 5 },
-  //];
-
   const [selectedItems, setSelectedItems] = useState([]);
-  const [options, setOptions] = useState([]); // Adicione a declaração de options
-  const [totalPoints, setTotalPoints] = useState(0); 
+  const [options, setOptions] = useState([]);
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     if (tipoItem === 'Frontend') {
@@ -46,29 +42,51 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
       setOptions(backendOptions);
     } else if (tipoItem === 'Banco') {
       setOptions(bancoOptions);
-  //  } else if (tipoItem === 'Deploy') {
-  //    setOptions(deployOptions);
     }
   }, [tipoItem]);
 
+  useEffect(() => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.filter((item) => options.find((option) => option.key === item.key))
+    );
+  }, [options]);
+
+  useEffect(() => {
+    updateItemInItems();
+  }, [totalPoints, description]);
+
   const handleSelectedItemsChange = (event, value) => {
     setSelectedItems(value);
-    const newTotalPoints = calculateTotalPoints(value);
-    setTotalPoints(newTotalPoints);
-    onTotalPointsChange(id, newTotalPoints);
+    setTotalPoints(value.reduce((sum, item) => sum + (item.points || 0), 0));
   };
 
-  const calculateTotalPoints = (selectedItems) => {
-    let sum = 0;
-    selectedItems.forEach((item) => {
-      sum += item.points || 0;
-    });
-    return sum;
+  const updateItemInItems = () => {
+    setItems((prevItems) =>
+      prevItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            totalPoints: totalPoints,
+            description: description,
+            selectedValues: selectedItems,
+          };
+        }
+        return item;
+      })
+    );
   };
 
   return (
     <Grid item my={2}>
-      <TextField style={{ width: 720 }} id="standard-basic" label="Descrição" size="small" variant="outlined" />
+      <TextField
+        style={{ width: 720 }}
+        id="standard-basic"
+        label="Descrição"
+        size="small"
+        variant="outlined"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
       <Grid item xs={12} mt={3}>
         <Autocomplete
           size="small"
@@ -80,6 +98,7 @@ export default function Item({ id, tipoItem, onTotalPointsChange }) {
           style={{ width: 720 }}
           renderInput={(params) => <TextField {...params} label="Atividade" size="small" variant="outlined" />}
           onChange={handleSelectedItemsChange}
+          value={selectedItems}
         />
       </Grid>
     </Grid>
