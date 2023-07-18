@@ -153,7 +153,7 @@ function App() {
         <Grid item xs={12} sm={6}>
         <TextField
         inputProps={{
-          style: {fontSize: 12} 
+          style: {fontSize: 13} 
         }}
         multiline
         rows={36}
