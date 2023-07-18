@@ -161,6 +161,7 @@ function App() {
         fullWidth
         defaultValue={allText}
         // Outras props que você desejar adicionar ao TextField
+        disabled
       />
         </Grid>
 
