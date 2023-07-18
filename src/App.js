@@ -60,6 +60,27 @@ function App() {
     bancoTotalPoints = getTotalPointsByTipoItem('Banco');
   }, [items]);
 
+  const generateTextFromItems = () => {
+    const descriptionsMap = {};
+    let text = "";
+
+    items.forEach((item) => {
+      const description = item.description;
+      if (!descriptionsMap[description]) {
+        descriptionsMap[description] = true;
+        text += `\n${description}\n\n`;
+      }
+
+      item.selectedValues.forEach((selectedValue) => {
+        text += `${selectedValue.value}\n`;
+      });
+    });
+
+    return text;
+  };
+
+  const allText = generateTextFromItems();
+
   return (
     <div style={{ width: '100%' }}>
       <Grid container spacing={2} my={5} alignItems="flex-start" justifyContent="center">
@@ -128,16 +149,21 @@ function App() {
         </Grid>
 
         {/* Metade direita */}
+
         <Grid item xs={12} sm={6}>
-          <TextField
-            multiline
-            rows={10}
-            variant="outlined"
-            fullWidth
-            defaultValue={bancoTotalPoints}
-            // Outras props que você desejar adicionar ao TextField
-          />
+        <TextField
+        inputProps={{
+          style: {fontSize: 12} 
+        }}
+        multiline
+        rows={36}
+        variant="outlined"
+        fullWidth
+        defaultValue={allText}
+        // Outras props que você desejar adicionar ao TextField
+      />
         </Grid>
+
       </Grid>
     </div>
   );
