@@ -151,18 +151,18 @@ function App() {
         {/* Metade direita */}
 
         <Grid item xs={12} sm={6}>
-        <TextField
-        inputProps={{
-          style: {fontSize: 13} 
-        }}
-        multiline
-        rows={36}
-        variant="outlined"
-        fullWidth
-        defaultValue={allText}
-        // Outras props que você desejar adicionar ao TextField
-        disabled
-      />
+          <TextField
+            inputProps={{
+              style: {fontSize: 13} 
+            }}
+            multiline
+            rows={36}
+            variant="outlined"
+            fullWidth
+            defaultValue={allText}
+            // Outras props que você desejar adicionar ao TextField
+            disabled
+          />
         </Grid>
 
       </Grid>
