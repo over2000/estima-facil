@@ -87,6 +87,7 @@ function App() {
         {/* Metade esquerda */}
         <Grid item xs={12} sm={6}>
           <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center" mt={2}>
+            
             {frontendTotalPoints > 0 && (
               <Grid item>
                 <Typography variant="h6" color="primary">
@@ -148,8 +149,6 @@ function App() {
           </Grid>
         </Grid>
 
-        {/* Metade direita */}
-
         <Grid item xs={12} sm={6}>
           <TextField
             inputProps={{
@@ -160,7 +159,6 @@ function App() {
             variant="outlined"
             fullWidth
             defaultValue={allText}
-            // Outras props que você desejar adicionar ao TextField
             disabled
           />
         </Grid>
