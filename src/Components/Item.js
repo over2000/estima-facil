@@ -21,6 +21,8 @@ export default function Item({ id, tipoItem, items, setItems }) {
     { key: 4, value: "T.1 - Teste e Debug funcionalidades novas. - 1 UST's", points: 1 },
     { key: 5, value: "T.2 - Teste e Debug para manutenção. - 0,5 UST's", points: 0.5 },
     { key: 6, value: "T.3 - Teste e Debug para manutenção, de sistemas críticos, com dependências de outros sistemas. - 2 UST's", points: 2 },
+    { key: 7, value: "P.1 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end. Programação completa, incluindo validação do campo, sanitização das “strings” etc. - 4 UST's", points: 4 },
+    { key: 8, value: "P.2 - Programação de 1 operação de banco (criação, leitura, atualização, remoção) no back-end, com dados submetidos pelo front-end, baseada em programação semelhante já existente ou CRUD. Programação completa, incluindo validação do campo, sanitização das “strings” etc. - 2 UST's", points: 2 },
   ];
 
   const bancoOptions = [
