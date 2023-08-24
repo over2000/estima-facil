@@ -1,0 +1,1 @@
+Criar uma versao 2 para o estima facil, sendo drag and drop com pesquisa por tipo de atividade
